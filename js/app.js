@@ -5,7 +5,7 @@ var payload;
 var decrypted_content;
 var decrypted_content_pretty;
 var tokens = [{
-  'label': "Test",
+  'label': "Demo",
   'token': null,
   'totp': new OTPAuth.TOTP({
     algorithm: 'SHA1',
@@ -49,7 +49,7 @@ Vue.component('otp-entry', {
         <p class="title is-size-2 ">{{ item.label }}</p>
       </div>
       <div class="column">
-        <p class="title is-size-2 is-pulled-right">{{ item.token }}</p>
+        <code class="title is-size-2 is-pulled-right">{{ item.token }}</code>
       </div>
     </div>
   </div>
