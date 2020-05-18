@@ -15,15 +15,17 @@
   </style>
 </head>
 <body>
-  <section id="app" class="section">
+  <section id="app" class="container">
 
-    <div class="container">
+    <div class="section">
 
       <h1 class="title">andOTP Backup Reader</h1>
-      
-      <div id="fileDiv" class="file has-name">
+
+      <p style="font-weight:bold;line-height: 3;">Your encrypted andOTP file</p>
+
+      <div class="file has-name" id="fileDiv">
         <label class="file-label">
-          <input class="file-input" type="file" name="resume" onchange='openFile(event)' id="iptFile">
+          <input class="file-input" type="file" name="resume" id="iptFile">
           <span class="file-cta">
             <span class="file-icon">
               <i class="fas fa-upload"></i>
@@ -37,20 +39,33 @@
           </span>
         </label>
       </div>
-
+      <br>
       <div class="field">
-        <label class="label is-uppercase">Decryption Password</label>
+        <label class="label">Decryption Password</label>
         <div class="control">
-          <input class="input" type="password" placeholder="Password" id="iptPassword" disabled>
+          <input v-on:keyup.enter="decrypt" class="input" type="password" placeholder="Password" id="iptPassword" disabled>
         </div>
       </div>
 
-      <button class="button" id="btnDecrypt" onclick='decrypt()' disabled>Decrypt</button>
-
-      <div class="content">
-        
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <button class="button" type="submit" id="btnDecrypt" onclick='decrypt()' disabled>Decrypt</button>
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="column">
+            <button class="button" type="submit" id="btnShow" onclick='toggleContent()' disabled>Show JSON</button>
+          </div>
+          <div class="column">
+            <button class="button" type="submit" id="btnDownload" onclick='downloadPlain()' disabled>Download</button>
+          </div>
+        </div>
       </div>
-
+      <br>
+      <div class="box" id="content" style="display:none;">
+        <pre id="json_box"></pre>        
+      </div>
       <div class="box">
         <otp-entry v-for="item in tokens" :item="item" :key="item.label"></otp-entry>
       </div>

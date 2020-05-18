@@ -3,6 +3,7 @@ var iterations, salt, iv;
 var payload;
 
 var decrypted_content;
+var decrypted_content_pretty;
 var tokens = [{
   'label': "Test",
   'token': null,
@@ -151,20 +152,23 @@ async function decrypt() {
     })
 
     if (decryptSuccess) {
+        document.getElementById("iptPassword").classList.remove("is-danger")
+        document.getElementById("iptPassword").classList.add("is-primary")
         decrypted_content = new TextDecoder("utf-8").decode(new Uint8Array(decrypted));
         addToken(decrypted_content);
-
-        //document.getElementById("content").innerText = decrypted_content;
-        //document.getElementById("btnDownload").disabled = false;
-        //document.getElementById("btnShow").disabled = false;
+        document.getElementById("json_box").innerText = JSON.stringify(JSON.parse(decrypted_content), undefined, 2);
+        document.getElementById("btnDownload").disabled = false;
+        document.getElementById("btnShow").disabled = false;
     } else {
-        decrypted_content = ""
+        tokens.splice(0,tokens.length);
+        document.getElementById("iptPassword").classList.remove("is-primary")
+        document.getElementById("iptPassword").classList.add("is-danger")
 
-        document.getElementById("content").innerText = ""
+        //document.getElementById("content").innerText = ""
         document.getElementById("btnDownload").disabled = true;
         document.getElementById("btnShow").disabled = true;
 
-        window.alert("Decryption failed, please check your password!");
+        //window.alert("Decryption failed, please check your password!");
     }
 };
 
@@ -180,7 +184,7 @@ function toggleContent() {
 
 
 function downloadPlain() {
-    data_uri = "data:text/json;charset=utf-8," + encodeURIComponent(decrypted_content);
+    data_uri = "data:text/json;charset=utf-8," + encodeURIComponent(decrypted_content, undefined, 2);
 
     var element = document.createElement("a");
     element.setAttribute("href", data_uri);
@@ -218,7 +222,11 @@ function loadHandler() {
 }
 
 function addToken(decrypted_content) {
+  console.log(decrypted_content)
   decrypted_content = JSON.parse(decrypted_content)
+  console.log(decrypted_content)
+  console.log(JSON.stringify(decrypted_content, undefined, 2))
+  tokens.splice(0,tokens.length);
   for(i=0; i < decrypted_content.length; i++) {
     item = decrypted_content[i]
     tokens.push({
