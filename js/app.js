@@ -46,10 +46,10 @@ Vue.component('otp-entry', {
     <progress class="progress is-info is-small" v-bind:value="item.period - item.updatingIn" :max="item.period"></progress>
     <div class="columns is-vcentered is-mobile">
       <div class="column">
-        <p class="title is-size-2 ">{{ item.label }}</p>
+        <p class="title is-size-3 ">{{ item.label }}</p>
       </div>
       <div class="column">
-        <code class="title is-size-2 is-pulled-right">{{ item.token }}</code>
+        <code class="title is-size-3 is-pulled-right">{{ item.token }}</code>
       </div>
     </div>
   </div>
