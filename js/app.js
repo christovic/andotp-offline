@@ -2,6 +2,7 @@ var password;
 var iterations, salt, iv;
 var payload;
 
+
 var decrypted_content;
 var decrypted_content_pretty;
 var tokens = [{
@@ -22,6 +23,27 @@ let int_length = 4;
 let salt_length = 12;
 let iv_length = 12;
 
+function showQR(index) {
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    text: "init",
+    width : 256,
+    height : 256,
+    useSVG: true
+  });
+
+  var obj = JSON.parse(decrypted_content)[index];
+
+  var url = `otpauth://${obj.type.toLowerCase()}/${obj.issuer}:${obj.label}?secret=${obj.secret}&issuer=${obj.issuer}&algorithm=${obj.algorithm}&digits=${obj.digits}&period=${obj.period}`;
+  document.getElementById("qrModal").classList.add("is-active")
+  url = encodeURI(url)
+  qrcode.makeCode(url.toString());
+  //document.getElementById("qrCode").src = qrcode;
+};
+
+function closeModal() {
+  document.getElementById("qrModal").classList.remove("is-active")
+}
+
 function getCurrentSeconds() {
   return Math.round(new Date().getTime() / 1000.0);
 }
@@ -39,7 +61,7 @@ function truncateTo(str, digits) {
 }
 
 Vue.component('otp-entry', {
-  props: ['item'],
+  props: ['item', 'index'],
   template: `
   <div class="content">
     <span class="has-text-grey is-size-7">Updating in {{ item.updatingIn }} seconds</span>
@@ -48,7 +70,7 @@ Vue.component('otp-entry', {
       <div class="column">
         <p class="title is-size-3 ">{{ item.label }}</p>
       </div>
-      <div class="column">
+      <div class="column" @click="showQR(index)">
         <code class="title is-size-3 is-pulled-right">{{ item.token }}</code>
       </div>
     </div>
@@ -93,7 +115,6 @@ new Vue({
     },
   }
 });
-
 
 
 function openFile(event) {
@@ -222,10 +243,7 @@ function loadHandler() {
 }
 
 function addToken(decrypted_content) {
-  console.log(decrypted_content)
   decrypted_content = JSON.parse(decrypted_content)
-  console.log(decrypted_content)
-  console.log(JSON.stringify(decrypted_content, undefined, 2))
   tokens.splice(0,tokens.length);
   for(i=0; i < decrypted_content.length; i++) {
     item = decrypted_content[i]
