@@ -44,7 +44,7 @@ Vue.component('otp-entry', {
   <div class="content">
     <span class="has-text-grey is-size-7">Updating in {{ item.updatingIn }} seconds</span>
     <progress class="progress is-info is-small" v-bind:value="item.period - item.updatingIn" :max="item.period"></progress>
-    <div class="columns is-centered is-mobile">
+    <div class="columns is-vcentered is-mobile">
       <div class="column">
         <p class="title is-size-2 ">{{ item.label }}</p>
       </div>
